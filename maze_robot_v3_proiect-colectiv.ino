@@ -71,7 +71,8 @@ uint8_t i2cBuffer[bufferLen];
 #define isHigh(P)((*(pinOfPin(P))& pinMask(P))>0)
 #define isLow(P)((*(pinOfPin(P))& pinMask(P))==0)
 
-#define irSensor_pin A1
+#define irSensor_pin1 A6
+#define irSensor_pin2 A1
 
 volatile unsigned long echo_timer_left = 0;
 volatile unsigned long echo_timer_front = 0;
@@ -86,7 +87,7 @@ int frontUltraDistanceMM;
 int rightUltraDistanceMM;
 
 
-const int trigger_pulse_time = 40; //us
+const int trigger_pulse_time = 50; //us
 const long ultra_measurement_cycle = 5000;//60000
 unsigned long timer_ultra_measurement_cycle = 0;
 byte ultra_sensor_turn = 0;
@@ -99,12 +100,12 @@ unsigned long x = 0;
 int speedd = 300;
 int spd = 50;
 int accc = 1000;
-int pasi_90_grade = 267.5 / 2 +5;//- 10; //267.5
+int pasi_90_grade = 267.5 / 2 + 5; //- 10; //267.5
 #define FORWARDS 0
 #define BACKWARDS 1
 #define LEFT 2
 #define RIGHT 3
-int go = 1;
+int go = 0;
 
 void setup()
 {
@@ -116,7 +117,8 @@ void setup()
   pinMode(TRIG_PIN_RIGHT, OUTPUT);
   digitalWrite(TRIG_PIN_RIGHT, LOW);
 
-  pinMode(irSensor_pin, INPUT);
+  pinMode(irSensor_pin1, INPUT);
+  pinMode(irSensor_pin2, INPUT);
   pinMode(ECHO_PIN_LEFT, INPUT);
   pinMode(ECHO_PIN_FRONT, INPUT);
   pinMode(ECHO_PIN_RIGHT, INPUT);
@@ -142,16 +144,46 @@ void setup()
   // stepper2.moveTo(1000000);
   // stepper2.setSpeed(3000);
 
-  Serial.println("dsafawe");
+  Wire.beginTransmission(player_address); // transmit to device #8
+  Wire.write(3);
+  Wire.endTransmission();
+
+  Serial.println("ready...");
 }
 
 uint16_t reading = 0;
 double a = 99;
+bool useLightSensor = 1;
 
 void loop()
 {
-  irSensor_value = analogRead(irSensor_pin);
-
+  if (useLightSensor == 1) {
+    irSensor_value = analogRead(irSensor_pin1);
+    if (irSensor_value > 50 && go == 1) {
+      go = 0;
+      stepper1.stop();
+      stepper2.stop();
+      delay(1000);
+      if (analogRead(irSensor_pin1) > 50) {
+        delay(500);
+        if (analogRead(irSensor_pin1) > 50) {
+          mazeEnd();
+        }
+        else {
+          go = 1;
+        }
+      } else {
+        go = 1;
+      }
+    }
+  }
+  /*
+    Serial.print("sensor 1: ");
+    Serial.print(analogRead(irSensor_pin1));
+    Serial.print("---sensor 2: ");
+    Serial.println(analogRead(irSensor_pin2));
+    delay(100);
+  */
   // Keep reading from Arduino Serial Monitor and send to HC-05
   /*
     if (stepper1.distanceToGo() == 0)
@@ -274,15 +306,38 @@ void loop()
         Serial.println("battery_current: ");
         sendBatteryCurrent();
       }
+      if (str == "c2") {
+        Serial.println("battery_current: ");
+        sendBatteryCurrent2();
+      }
       if (str == "go") {
         Serial.println("going...");
         go = 1;
+        Wire.beginTransmission(player_address); // transmit to device #8
+        Wire.write(1);
+        Wire.endTransmission();
       }
       if (str == "st") {
         Serial.println("stopping...");
         go = 0;
         stepper1.stop();
         stepper2.stop();
+      }
+      if (str == "sz") {
+        Serial.println("pulling ir sensor values...");
+        Serial.print("sensor 1:");
+        Serial.println(analogRead(irSensor_pin1));
+        Serial.print("sensor 2:");
+        Serial.println(analogRead(irSensor_pin2));
+      }
+      if (str == "toggle_sensor") {
+        if (useLightSensor == 0) {
+          useLightSensor = 1;
+          Serial.println("sensor enabled");
+        } else {
+          useLightSensor = 0;
+          Serial.println("sensor disabled");
+        }
       }
     }
     /*
@@ -375,14 +430,14 @@ void loop()
     }
   }
   if ((MM_PER_1MICROSEC * echo_timer_front_copy / 2) < fr) {
-    if ((MM_PER_1MICROSEC * echo_timer_left_copy / 2) <= lftUpper+40) {
+    if ((MM_PER_1MICROSEC * echo_timer_left_copy / 2) <= lftUpper + 40) {
       if (go == 1) {
         turn_right_90_deg();
         //  Serial.print("asdsafadsad: ");
         // Serial.println((MM_PER_1MICROSEC * echo_timer_front_copy / 2));
         delay(2000);
       }
-    } else if ((MM_PER_1MICROSEC * echo_timer_left_copy / 2) > lftUpper+40) {
+    } else if ((MM_PER_1MICROSEC * echo_timer_left_copy / 2) > lftUpper + 40) {
       //stepper1.moveTo(-1000000);
       //stepper2.stop();
       if (go == 1) {
@@ -601,6 +656,9 @@ void rotate_degrees(int direction, int deg) {
 void sendBatteryCurrent() {
   Serial.println(fetchWord(CURRENT));   // print the reading
 }
+void sendBatteryCurrent2() {
+  Serial.println(fetchWord2(CURRENT));   // print the reading
+}
 void sendBatteryInfoThroughBluetooth() {
   Wire.beginTransmission(11); // transmit to device #112 (0x70)
   Wire.write(byte(RELATIVE_SOC));      // sets register pointer to the command register (0x00)
@@ -665,7 +723,25 @@ int fetchWord(byte func)
   Wire.requestFrom(11, 2, true);   // request 2 bytes from slave device #112
   byte b1 = Wire.read();
   byte b2 = Wire.read();
-  return (int)b1 | ((( int)b2) << 8);
+  int ret = 0;
+  ret = ((int)b2) << 8;
+  ret = ret | b1;
+  //return (int)b1 | ((( int)b2) << 8);
+  return ret;
+}
+int fetchWord2(byte func)
+{
+  Wire.beginTransmission(11); // transmit to device #112 (0x70)
+  Wire.write(func);      // sets register pointer to the command register (0x00)
+  Wire.endTransmission();      // stop transmitting
+  Wire.requestFrom(11, 2, true);   // request 2 bytes from slave device #112
+  byte b2 = Wire.read();
+  byte b1 = Wire.read();
+  int ret = 0;
+  ret = ((int)b2) << 8;
+  ret = ret | b1;
+  //return (int)b1 | ((( int)b2) << 8);
+  return ret;
 }
 void turn_right_90_deg() {
   stepper1.stop();
@@ -681,4 +757,13 @@ void turn_left_90_deg() {
   stepper1.move(-pasi_90_grade);
   stepper2.move(-pasi_90_grade);
 }
-
+void mazeEnd() {
+  Serial.println("reached goal...");
+  go = 0;
+  stepper1.stop();
+  stepper2.stop();
+  Serial.println("playing song2:");
+  Wire.beginTransmission(player_address); // transmit to device #8
+  Wire.write(2);
+  Wire.endTransmission();
+}
