@@ -1,0 +1,143 @@
+{
+  "project_info": {
+    "project_number": "916633686274",
+    "firebase_url": "https://dorel-ed8b6.firebaseio.com",
+    "project_id": "dorel-ed8b6",
+    "storage_bucket": "dorel-ed8b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916633686274:android:7f380a586d40dff1",
+        "android_client_info": {
+          "package_name": "com.dorel.car"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916633686274-2q0t33v2ua393cidk5nma2rnls9503qp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dorel.car",
+            "certificate_hash": "66400c6f50fc6a7f945e64fd9abb05eeac6171b3"
+          }
+        },
+        {
+          "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRQzL4iSjTCOEL5iPV9jhu--vACHqLDVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "916633686274-eb0euaatvajfaqsksbj65ll69fjncu2i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dorel.car"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916633686274:android:d8f6ead6c7ac77b1",
+        "android_client_info": {
+          "package_name": "com.example.danyal.bluetoothhc05"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916633686274-v9kggrm0km8f8bdidn2jdrot275qt9ie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.danyal.bluetoothhc05",
+            "certificate_hash": "66400c6f50fc6a7f945e64fd9abb05eeac6171b3"
+          }
+        },
+        {
+          "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRQzL4iSjTCOEL5iPV9jhu--vACHqLDVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "916633686274-eb0euaatvajfaqsksbj65ll69fjncu2i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dorel.car"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916633686274:android:948551a6b64383f9",
+        "android_client_info": {
+          "package_name": "com.example.user.bluetooth_communication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916633686274-81f98j6q1rfbedek3b4r7hg5khpgqgtq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.bluetooth_communication",
+            "certificate_hash": "66400c6f50fc6a7f945e64fd9abb05eeac6171b3"
+          }
+        },
+        {
+          "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRQzL4iSjTCOEL5iPV9jhu--vACHqLDVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916633686274-po1tltva7f6io4nua7s5pepooc6lofo2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "916633686274-eb0euaatvajfaqsksbj65ll69fjncu2i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dorel.car"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.danyal.bluetoothhc05.ledControl">
+
+
+
+        <EditText
+            android:layout_marginTop="10dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="milimetri sau pasi"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:textSize="20dp"
+            android:layout_alignParentStart="true"
+            android:id="@+id/mm"/>
+
+        <Switch
+            android:id="@+id/switchmm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+
+            android:text="mm" />
+
+        <ImageButton
+            android:id="@+id/fata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/switchmm"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@mipmap/fata" />
+
+        <ImageButton
+            android:id="@+id/stanga"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/fata"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@mipmap/stanga" />
+
+        <ImageButton
+            android:id="@+id/dreapta"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/fata"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/spate"
+            app:srcCompat="@mipmap/dreapta" />
+
+        <ImageButton
+            android:id="@+id/spate"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fata"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/stanga"
+            app:srcCompat="@mipmap/spate" />
+
+    <Button
+        android:layout_below="@+id/spate"
+        android:layout_marginTop="100dp"
+        android:id="@+id/disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disconnect" />
+
+    <TextView
+        android:layout_below="@+id/disconnect"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:id="@+id/song1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="song1" />
+
+    <Button
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/song1"
+        android:id="@+id/song2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Song2" />
+
+    <Button
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/song2"
+        android:id="@+id/go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GO" />
+
+    <Button
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/go"
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STOP" />
+
+    <Button
+        android:layout_below="@+id/song1"
+        android:layout_marginTop="10dp"
+        android:id="@+id/c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C" />
+
+
+</RelativeLayout>
