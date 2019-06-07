@@ -541,7 +541,7 @@ void triggerUltraSensors()
 void echoLeftReceived() {
   //if (digitalRead(ECHO_PIN_LEFT) == HIGH) {
   // if (bitRead(PORTD, 5) == 1) {
-  volatile unsigned long tmr = micros();
+  unsigned long tmr = micros();
   if (isHigh(ECHO_PIN_LEFT)) {
     echo_timer_left = tmr;
     //   Serial.println("echo left high");
@@ -563,7 +563,7 @@ void echoLeftReceived() {
   }
 }
 void echoFrontReceived() {
-  volatile unsigned long tmr = micros();
+  unsigned long tmr = micros();
 
   if (isHigh(ECHO_PIN_FRONT)) {
     echo_timer_front = tmr;
@@ -583,7 +583,7 @@ void echoFrontReceived() {
   }
 }
 void echoRightReceived() {
-  volatile unsigned long tmr = micros();
+  unsigned long tmr = micros();
 
   if (isHigh(ECHO_PIN_RIGHT)) {
     echo_timer_right = tmr;
