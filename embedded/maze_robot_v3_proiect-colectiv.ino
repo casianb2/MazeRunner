@@ -154,9 +154,18 @@ void setup()
 uint16_t reading = 0;
 double a = 99;
 bool useLightSensor = 1;
+bool powerSave_on = 1;
 
 void loop()
 {
+
+  if (!stepper1.isRunning() && !stepper2.isRunning() && powerSave_on) {
+    if (isLow(SLEEP)) {
+      digitalWrite(SLEEP, HIGH);//disable motors
+    }
+  }
+
+
   if (useLightSensor == 1) {
     irSensor_value = analogRead(irSensor_pin1);
     if (irSensor_value > 50 && go == 1) {
@@ -243,24 +252,28 @@ void loop()
       if (str == "f") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() + 1000);
         stepper2.moveTo(stepper2.currentPosition() - 1000);
       }
       if (str == "b") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() - 1000);
         stepper2.moveTo(stepper2.currentPosition() + 1000);
       }
       if (str == "ff") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() + 10000);
         stepper2.moveTo(stepper2.currentPosition() - 10000);
       }
       if (str == "bb") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() - 10000);
         stepper2.moveTo(stepper2.currentPosition() + 10000);
       }
@@ -268,12 +281,14 @@ void loop()
       if (str == "r") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() + 2000);
         stepper2.moveTo(stepper2.currentPosition() + 2000);
       }
       if (str == "l") {
         stepper1.stop();
         stepper2.stop();
+        digitalWrite(SLEEP, LOW); //enable motors
         stepper1.moveTo(stepper1.currentPosition() - 2000);
         stepper2.moveTo(stepper2.currentPosition() - 2000);
       }
@@ -313,6 +328,7 @@ void loop()
       if (str == "go") {
         Serial.println("going...");
         go = 1;
+        digitalWrite(SLEEP, LOW); //enable motors
         Wire.beginTransmission(player_address); // transmit to device #8
         Wire.write(1);
         Wire.endTransmission();
@@ -337,6 +353,16 @@ void loop()
         } else {
           useLightSensor = 0;
           Serial.println("sensor disabled");
+        }
+      }
+      if (str == "toggle_powersave") {
+        if (powerSave_on == 0) {
+          powerSave_on = 1;
+          Serial.println("power save enabled");
+        } else {
+          powerSave_on = 0;
+          digitalWrite(SLEEP, LOW);
+          Serial.println("power save disabled");
         }
       }
     }
@@ -410,6 +436,7 @@ void loop()
     // stepper2.setMaxSpeed(spd);
     if (go == 1) {
       stepper1.stop();
+      digitalWrite(SLEEP, LOW); //enable motors
       stepper2.moveTo(1000000); //leftMotor
     }
   }
@@ -417,6 +444,7 @@ void loop()
     //  turn_left();
     // stepper2.setMaxSpeed(300);
     if (go == 1) {
+      digitalWrite(SLEEP, LOW); //enable motors
       stepper1.moveTo(-1000000);
       stepper2.stop();
     }
@@ -425,6 +453,7 @@ void loop()
     //  go_straight();
     // stepper2.setMaxSpeed(300);
     if (go == 1) {
+      digitalWrite(SLEEP, LOW); //enable motors
       stepper1.moveTo(-1000000);
       stepper2.moveTo(1000000);
     }
@@ -432,6 +461,7 @@ void loop()
   if ((MM_PER_1MICROSEC * echo_timer_front_copy / 2) < fr) {
     if ((MM_PER_1MICROSEC * echo_timer_left_copy / 2) <= lftUpper + 40) {
       if (go == 1) {
+        digitalWrite(SLEEP, LOW); //enable motors
         turn_right_90_deg();
         //  Serial.print("asdsafadsad: ");
         // Serial.println((MM_PER_1MICROSEC * echo_timer_front_copy / 2));
@@ -441,6 +471,7 @@ void loop()
       //stepper1.moveTo(-1000000);
       //stepper2.stop();
       if (go == 1) {
+        digitalWrite(SLEEP, LOW); //enable motors
         turn_left_90_deg();
         delay(1000);
         stepper1.moveTo(-1000000);
@@ -541,7 +572,7 @@ void triggerUltraSensors()
 void echoLeftReceived() {
   //if (digitalRead(ECHO_PIN_LEFT) == HIGH) {
   // if (bitRead(PORTD, 5) == 1) {
-  unsigned long tmr = micros();
+  volatile unsigned long tmr = micros();
   if (isHigh(ECHO_PIN_LEFT)) {
     echo_timer_left = tmr;
     //   Serial.println("echo left high");
@@ -563,7 +594,7 @@ void echoLeftReceived() {
   }
 }
 void echoFrontReceived() {
-  unsigned long tmr = micros();
+  volatile unsigned long tmr = micros();
 
   if (isHigh(ECHO_PIN_FRONT)) {
     echo_timer_front = tmr;
@@ -583,7 +614,7 @@ void echoFrontReceived() {
   }
 }
 void echoRightReceived() {
-  unsigned long tmr = micros();
+  volatile unsigned long tmr = micros();
 
   if (isHigh(ECHO_PIN_RIGHT)) {
     echo_timer_right = tmr;
@@ -608,6 +639,7 @@ void do_steps(int direction, long steps_to_do) {
 
   stepper1.stop();
   stepper2.stop();
+  digitalWrite(SLEEP, LOW); //enable motors
   if (direction == FORWARDS) {
     stepper1.moveTo(stepper1.currentPosition() + steps_to_do);
     stepper2.moveTo(stepper2.currentPosition() - steps_to_do);
@@ -626,6 +658,7 @@ void do_mm(int direction, long mm) {
   long steps_to_do = mm * steps_per_mm;
   stepper1.stop();
   stepper2.stop();
+  digitalWrite(SLEEP, LOW); //enable motors
   if (direction == FORWARDS) {
     stepper1.moveTo(stepper1.currentPosition() + steps_to_do);
     stepper2.moveTo(stepper2.currentPosition() - steps_to_do);
@@ -643,6 +676,7 @@ void rotate_degrees(int direction, int deg) {
   int steps_to_do = deg;
   stepper1.stop();
   stepper2.stop();
+  digitalWrite(SLEEP, LOW); //enable motors
   if (direction == LEFT) {
     stepper1.moveTo(stepper1.currentPosition() - steps_to_do);
     stepper2.moveTo(stepper2.currentPosition() - steps_to_do);
@@ -746,14 +780,14 @@ int fetchWord2(byte func)
 void turn_right_90_deg() {
   stepper1.stop();
   stepper2.stop();
-  delay(2000);
+  delay(1000);
   stepper1.move(pasi_90_grade);
   stepper2.move(pasi_90_grade);
 }
 void turn_left_90_deg() {
   stepper1.stop();
   stepper2.stop();
-  delay(2000);
+  delay(1000);
   stepper1.move(-pasi_90_grade);
   stepper2.move(-pasi_90_grade);
 }
